@@ -115,38 +115,41 @@ jobs:
           node-version: '20'
 
       - name: Install Token Transformer
-        run: npm install @tokens-studio/sd-transforms style-dictionary@4
+        run: npm install @tokens-studio/sd-transforms style-dictionary@5
+
+      - name: Create transform script
+        run: |
+          cat > transform.mjs << 'SCRIPT'
+          import StyleDictionary from 'style-dictionary';
+          import { register } from '@tokens-studio/sd-transforms';
+
+          register(StyleDictionary);
+
+          const sd = new StyleDictionary({
+            source: ['tokens.json'],
+            preprocessors: ['tokens-studio'],
+            platforms: {
+              css: {
+                transformGroup: 'tokens-studio',
+                transforms: ['name/kebab'],
+                buildPath: 'build/',
+                files: [{
+                  destination: 'tokens.css',
+                  format: 'css/variables',
+                  options: {
+                    outputReferences: true
+                  }
+                }]
+              }
+            }
+          });
+
+          await sd.buildAllPlatforms();
+          console.log('✓ Tokens transformed to CSS');
+          SCRIPT
 
       - name: Transform tokens to CSS variables
-        run: |
-          node << 'EOF'
-            const StyleDictionary = require('style-dictionary');
-            const { registerTransforms } = require('@tokens-studio/sd-transforms');
-
-            registerTransforms(StyleDictionary);
-
-            const sd = new StyleDictionary({
-              source: ['tokens.json'],
-              preprocessors: ['tokens-studio'],
-              platforms: {
-                css: {
-                  transformGroup: 'tokens-studio',
-                  transforms: ['name/kebab'],
-                  buildPath: 'build/',
-                  files: [{
-                    destination: 'tokens.css',
-                    format: 'css/variables',
-                    options: {
-                      outputReferences: true
-                    }
-                  }]
-                }
-              }
-            });
-
-            sd.buildAllPlatforms();
-            console.log('✓ Tokens transformed to CSS');
-          EOF
+        run: node transform.mjs
 
       - name: Upload transformed tokens
         uses: actions/upload-artifact@v4
