@@ -1,0 +1,171 @@
+name: Design Tokens CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tokens.json'
+      - '$themes.json'
+      - '$metadata.json'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tokens.json'
+      - '$themes.json'
+      - '$metadata.json'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Tokens
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate JSON syntax
+        run: |
+          echo "Validating tokens.json..."
+          node -e "const t = require('./tokens.json'); console.log('✓ tokens.json is valid');"
+
+          echo "Validating \$themes.json..."
+          node -e "const t = require('./$themes.json'); console.log('✓ \$themes.json is valid');"
+
+          echo "Validating \$metadata.json..."
+          node -e "const t = require('./$metadata.json'); console.log('✓ \$metadata.json is valid');"
+
+      - name: Validate token structure
+        run: |
+          node -e "
+            const tokens = require('./tokens.json');
+            const themes = require('./$themes.json');
+            const metadata = require('./$metadata.json');
+
+            // Check required token sets exist
+            const requiredSets = ['global', 'light', 'typography', 'component'];
+            const missingSets = requiredSets.filter(set => !tokens[set]);
+
+            if (missingSets.length > 0) {
+              console.error('✗ Missing required token sets:', missingSets.join(', '));
+              process.exit(1);
+            }
+            console.log('✓ All required token sets present');
+
+            // Check metadata has correct set order
+            const metadataSets = metadata.tokenSetOrder || [];
+            const allSetsInMetadata = requiredSets.every(set => metadataSets.includes(set));
+
+            if (!allSetsInMetadata) {
+              console.error('✗ Metadata tokenSetOrder missing required sets');
+              process.exit(1);
+            }
+            console.log('✓ Metadata token set order is valid');
+
+            // Check themes reference valid sets
+            themes.forEach((theme, i) => {
+              const themeSets = Object.keys(theme.selectedTokenSets || {});
+              const invalidSets = themeSets.filter(set => !tokens[set]);
+              if (invalidSets.length > 0) {
+                console.error('✗ Theme', theme.name, 'references invalid sets:', invalidSets.join(', '));
+                process.exit(1);
+              }
+            });
+            console.log('✓ Theme configurations are valid');
+
+            // Count tokens
+            const countTokens = (obj, prefix = '') => {
+              let count = 0;
+              for (const [key, value] of Object.entries(obj)) {
+                if (value && typeof value === 'object') {
+                  if (value.value !== undefined && value.type !== undefined) {
+                    count++;
+                  } else {
+                    count += countTokens(value, prefix + key + '.');
+                  }
+                }
+              }
+              return count;
+            };
+
+            const totalTokens = Object.entries(tokens).reduce((sum, [set, values]) => {
+              const setCount = countTokens(values);
+              console.log('  -', set + ':', setCount, 'tokens');
+              return sum + setCount;
+            }, 0);
+
+            console.log('✓ Total tokens:', totalTokens);
+          "
+
+  transform:
+    name: Transform Tokens
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Token Transformer
+        run: npm install @tokens-studio/sd-transforms style-dictionary@4
+
+      - name: Transform tokens to CSS variables
+        run: |
+          node -e "
+            const StyleDictionary = require('style-dictionary');
+            const { registerTransforms } = require('@tokens-studio/sd-transforms');
+
+            registerTransforms(StyleDictionary);
+
+            const sd = new StyleDictionary({
+              source: ['tokens.json'],
+              preprocessors: ['tokens-studio'],
+              platforms: {
+                css: {
+                  transformGroup: 'tokens-studio',
+                  transforms: ['name/kebab'],
+                  buildPath: 'build/',
+                  files: [{
+                    destination: 'tokens.css',
+                    format: 'css/variables',
+                    options: {
+                      outputReferences: true
+                    }
+                  }]
+                }
+              }
+            });
+
+            sd.buildAllPlatforms();
+            console.log('✓ Tokens transformed to CSS');
+          "
+
+      - name: Upload transformed tokens
+        uses: actions/upload-artifact@v4
+        with:
+          name: transformed-tokens
+          path: build/
+          retention-days: 7
+
+  notify-app:
+    name: Notify App Repository
+    runs-on: ubuntu-latest
+    needs: [validate, transform]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Trigger app repository workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.REPO_DISPATCH_TOKEN }}
+          repository: donate-mate/donatemate-app
+          event-type: design-tokens-updated
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+        continue-on-error: true
