@@ -1,0 +1,315 @@
+/**
+ * DonateMate Design Tokens - CSS Variables
+ * Use these variables when generating HTML for Figma import
+ */
+
+:root {
+  /* ==================== COLORS ==================== */
+
+  /* Core Colors */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  /* Slate (Neutrals) */
+  --color-slate-25: #FAFCFF;
+  --color-slate-50: #F8FAFC;
+  --color-slate-75: #F5F8FC;
+  --color-slate-100: #F2F5F9;
+  --color-slate-150: #E8ECF0;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1;
+  --color-slate-400: #94A3B8;
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-900: #0F172A;
+
+  /* Sky (Primary/Accent) */
+  --color-sky-300: #5DD3FF;
+  --color-sky-400: #3DBAFE;
+  --color-sky-500: #2AA8F0;
+  --color-sky-600: #1E9AE8;
+
+  /* Red (Error) */
+  --color-red-500: #EF4444;
+  --color-red-600: #DC2626;
+
+  /* Green (Success) */
+  --color-green-500: #22C55E;
+  --color-green-600: #16A34A;
+
+  /* ==================== SEMANTIC COLORS ==================== */
+
+  /* Text */
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-500);
+  --text-tertiary: var(--color-slate-400);
+  --text-label: var(--color-slate-600);
+  --text-focus: var(--color-sky-400);
+  --text-error: var(--color-red-600);
+  --text-success: var(--color-green-600);
+  --text-inverse: var(--color-white);
+
+  /* Background */
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--color-slate-50);
+  --bg-tertiary: var(--color-slate-100);
+  --bg-inverse: var(--color-slate-900);
+
+  /* Border */
+  --border-primary: var(--color-slate-200);
+  --border-secondary: var(--color-slate-300);
+  --border-focus: var(--color-sky-400);
+  --border-error: var(--color-red-500);
+  --border-success: var(--color-green-500);
+
+  /* Accent */
+  --accent-primary: var(--color-sky-400);
+  --accent-primary-light: var(--color-sky-300);
+  --accent-primary-dark: var(--color-sky-500);
+  --accent-primary-darker: var(--color-sky-600);
+
+  /* Icon */
+  --icon-default: var(--color-slate-500);
+  --icon-muted: var(--color-slate-400);
+  --icon-active: var(--color-sky-400);
+  --icon-error: var(--color-red-500);
+  --icon-success: var(--color-green-500);
+  --icon-inverse: var(--color-white);
+
+  /* ==================== SPACING ==================== */
+  --space-xs4: 2px;
+  --space-xs3: 4px;
+  --space-xs2: 8px;
+  --space-xs: 12px;
+  --space-sm: 16px;
+  --space-md: 20px;
+  --space-lg: 24px;
+  --space-xl: 28px;
+  --space-xl2: 32px;
+  --space-xl3: 36px;
+  --space-xl4: 40px;
+  --space-xl5: 48px;
+  --space-xl6: 56px;
+  --space-xl7: 64px;
+
+  /* ==================== TYPOGRAPHY ==================== */
+  --font-family: 'DM Sans', sans-serif;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Font Sizes */
+  --font-size-xs3: 8px;
+  --font-size-xs2: 10px;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-xl2: 24px;
+  --font-size-xl3: 28px;
+  --font-size-xl4: 32px;
+  --font-size-xl5: 40px;
+
+  /* ==================== BORDER RADIUS ==================== */
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-xl2: 24px;
+  --radius-full: 9999px;
+
+  /* ==================== SHADOWS ==================== */
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ==================== TYPOGRAPHY CLASSES ==================== */
+
+/* Display */
+.text-display-xl {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl5);
+  line-height: 130%;
+}
+
+.text-display-lg {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl4);
+  line-height: 131%;
+}
+
+.text-display-md {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl3);
+  line-height: 136%;
+}
+
+/* Heading */
+.text-heading-xl {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl2);
+  line-height: 133%;
+}
+
+.text-heading-lg {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  line-height: 150%;
+}
+
+.text-heading-md {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  line-height: 156%;
+}
+
+.text-heading-sm {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  line-height: 150%;
+}
+
+/* Body */
+.text-body-lg {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-lg);
+  line-height: 156%;
+}
+
+.text-body-md {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md);
+  line-height: 150%;
+}
+
+.text-body-sm {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-sm);
+  line-height: 143%;
+}
+
+.text-body-xs {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-xs);
+  line-height: 150%;
+}
+
+/* Label */
+.text-label-lg {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md);
+  line-height: 150%;
+}
+
+.text-label-md {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  line-height: 143%;
+}
+
+.text-label-sm {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  line-height: 150%;
+}
+
+/* ==================== COMPONENT CLASSES ==================== */
+
+/* Button - Primary */
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-primary-dark);
+}
+
+/* Button - Secondary */
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+}
+
+/* Input */
+.input {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+.input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.input:focus {
+  border-color: var(--border-focus);
+  outline: none;
+}
+
+.input-error {
+  border-color: var(--border-error);
+}
+
+/* Card */
+.card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Modal */
+.modal {
+  background-color: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-overlay {
+  background-color: rgba(15, 23, 42, 0.5);
+}
