@@ -1,0 +1,13 @@
+[
+  {
+    "id": "light",
+    "name": "Light",
+    "selectedTokenSets": {
+      "global": "enabled",
+      "light": "enabled",
+      "typography": "enabled",
+      "component": "enabled"
+    },
+    "$figmaStyleReferences": {}
+  }
+]
